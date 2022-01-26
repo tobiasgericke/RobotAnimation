@@ -1,0 +1,129 @@
+﻿<Window x:Class="RobotAnimation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RobotAnimation"
+        mc:Ignorable="d"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        Title="MainWindow" Height="900" Width="1200">
+    <Window.Resources>
+
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.Resources>
+            <!--Storyboards for Arm1-->
+            <Storyboard x:Key="Arm1Storyboard">
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm1AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm1Rotation.RetractAngleStart}" 
+                    To="{Binding Arm1Rotation.RetractAngleEnd}" 
+                    Duration="0:0:2"/>
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm1AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm1Rotation.RotationAngleStart}" 
+                    To="{Binding Arm1Rotation.RotationAngleEnd}"
+                    BeginTime="0:0:2"
+                    Duration="0:0:2"/>
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm1AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm1Rotation.ExpandAngleStart}" 
+                    To="{Binding Arm1Rotation.ExpandAngleEnd}"
+                    BeginTime="0:0:4"
+                    Duration="0:0:2"/>
+            </Storyboard>
+            <!--Storyboards for Arm2-->
+            <Storyboard x:Key="Arm2Storyboard">
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm2AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm2Rotation.RetractAngleStart}" 
+                    To="{Binding Arm2Rotation.RetractAngleEnd}" 
+                    Duration="0:0:2"/>
+
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm2AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm2Rotation.ExpandAngleStart}" 
+                    To="{Binding Arm2Rotation.ExpandAngleEnd}"
+                    BeginTime="0:0:4"
+                    Duration="0:0:2"/>
+            </Storyboard>
+            <!--Storyboards for Arm3-->
+            <Storyboard x:Key="Arm3Storyboard">
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm3AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm3Rotation.RetractAngleStart}" 
+                    To="{Binding Arm3Rotation.RetractAngleEnd}" 
+                    Duration="0:0:2"/>
+                
+                <DoubleAnimation
+                    Storyboard.TargetName="Arm3AnimationTransform"
+                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                    From="{Binding Arm3Rotation.ExpandAngleStart}" 
+                    To="{Binding Arm3Rotation.ExpandAngleEnd}"
+                    BeginTime="0:0:4"
+                    Duration="0:0:2"/><!---->
+            </Storyboard>
+        </Grid.Resources>
+
+        <StackPanel Grid.Column="0">
+            <TextBlock Text="Teachpoints" FontSize="30"></TextBlock>
+            <TextBox Text="{Binding TeachPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="30"/>
+        </StackPanel>
+
+        <Canvas x:Name="DrawingGround" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFEEC">
+            <b:Interaction.Triggers>
+                <b:DataTrigger Binding="{Binding StartAnimationArm1}" Value="True">
+                    <b:ControlStoryboardAction Storyboard="{StaticResource Arm1Storyboard}" />
+                </b:DataTrigger>
+                <b:DataTrigger Binding="{Binding StartAnimationArm1}" Value="True">
+                    <b:ControlStoryboardAction Storyboard="{StaticResource Arm2Storyboard}" />
+                </b:DataTrigger>
+                <b:DataTrigger Binding="{Binding StartAnimationArm1}" Value="True">
+                    <b:ControlStoryboardAction Storyboard="{StaticResource Arm3Storyboard}" />
+                </b:DataTrigger>
+            </b:Interaction.Triggers>
+
+            <Ellipse Name="Plate1" Fill="#FFE0E2EA" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80" Canvas.Left="-40" Canvas.Top="-400"/>
+            <Ellipse Name="Plate2" Fill="#FFE0E2EA" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80" Canvas.Left="320" Canvas.Top="-40"/>
+            <Ellipse Name="Plate3" Fill="#FFE0E2EA" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80" Canvas.Left="-400" Canvas.Top="-40"/>
+
+            <Canvas x:Name="Axis1" Background="Coral" Width="800" Height="800" Opacity="0.7" Left="-400" Top="-400" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <RotateTransform x:Name="Arm1AnimationTransform" Angle="0"/>
+                </Canvas.RenderTransform>
+                <Ellipse x:Name="Socket" Fill="Gray" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Width="25" Canvas.Left="387" Canvas.Top="387"/>
+                <local:Arm x:Name="Arm1" Fill="Black" Canvas.Left="400" Canvas.Top="400"/>
+
+                <Canvas x:Name="Axis2" Background="Aquamarine" Opacity="0.7" Width="400" Height="400" Canvas.Left="400" Canvas.Top="200" RenderTransformOrigin="0.375,0.5">
+                    <Canvas.RenderTransform>
+                        <RotateTransform x:Name="Arm2AnimationTransform" Angle="0"/>
+                    </Canvas.RenderTransform>
+                    <local:Arm x:Name="Arm2" Fill="Black" Canvas.Left="150" Canvas.Top="200"/>
+
+                    <Canvas x:Name="Axis3" Background="Chartreuse" Opacity="0.7" Canvas.Left="300" Canvas.Top="150" Width="100" Height="100" RenderTransformOrigin="0,0.5">
+                        <Canvas.RenderTransform>
+                            <RotateTransform x:Name="Arm3AnimationTransform" Angle="0"/>
+                        </Canvas.RenderTransform>
+                        <!--Insert Grabber Shape-->
+                        <Path Data="M10,0.5 C13.60711,0.5 16.744678,2.5103464 18.353401,5.4717355 L18.368313,5.4999995 25.5,5.4999995 25.5,4.4999995 25.5,0.5 29.5,0.5 39.5,0.5 39.5,4.4999995 29.5,4.4999995 29.5,5.4999995 29.5,14.5 29.5,15.5 39.5,15.5 39.5,19.5 29.5,19.5 25.5,19.5 25.5,15.5 25.5,14.5 18.368313,14.5 18.353401,14.528264 C16.744678,17.489653 13.60711,19.5 10,19.5 4.7532949,19.5 0.5,15.246705 0.5,10 0.5,4.7532949 4.7532949,0.5 10,0.5 z" Fill="#FFFF005D" Height="20" Canvas.Left="-10" Stroke="Black" Stretch="Fill" Canvas.Top="40" Width="40"/>
+                    </Canvas>
+                </Canvas>
+            </Canvas>
+        </Canvas>
+    </Grid>
+</Window>
